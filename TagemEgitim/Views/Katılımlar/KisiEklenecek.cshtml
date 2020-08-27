@@ -1,0 +1,115 @@
+﻿@model TagemEgitim.Models.Kişi
+ @{ 
+     var ünvanlar = (List<Ünvan>)ViewBag.ünvanlar;
+     var ülkeler = (List<Ülke>)ViewBag.ülkeler;
+ }
+<h3>Kişi Ekle</h3>
+<hr />
+<div>
+
+    <form id="KisiEklenecekForm">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="email" class="control-label"></label>
+            <input asp-for="email" class="form-control emailaranacak" />
+            <span asp-validation-for="email" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="isim" class="control-label"></label>
+            <input asp-for="isim" class="form-control isimaranacak" />
+            <span asp-validation-for="isim" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="soyisim" class="control-label"></label>
+            <input asp-for="soyisim" class="form-control soyisimaranacak" />
+            <span asp-validation-for="soyisim" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ünvanID" class="control-label"></label>
+            <select asp-for="ünvanID" class="form-control">
+                <option value="">Ünvan Seçiniz...</option>
+                @foreach (var item in ünvanlar)
+                {
+                    <option value="@item.ID">@item.isim</option>
+                }
+            </select>
+            <span asp-validation-for="ünvanID" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="cinsiyet" class="control-label"></label>
+            <select asp-for="cinsiyet" class="form-control" asp-items="Html.GetEnumSelectList<CİNSİYET>()"></select>
+            <span asp-validation-for="cinsiyet" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="doğumTarihi" class="control-label"></label>
+            <input asp-for="doğumTarihi" class="form-control" />
+            <span asp-validation-for="doğumTarihi" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ülkeID" class="control-label"></label>
+            <select asp-for="ülkeID" class="form-control ulkearanacak" >
+                <option value="">Ülke Seçiniz...</option>
+                @foreach (var item in ülkeler)
+                {
+                    <option value="@item.ID">@item.isim</option>
+                }
+            </select>
+            <span asp-validation-for="ülkeID" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="kurum" class="control-label"></label>
+            <input asp-for="kurum" class="form-control" />
+            <span asp-validation-for="kurum" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="görev" class="control-label"></label>
+            <input asp-for="görev" class="form-control" />
+            <span asp-validation-for="görev" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="adres" class="control-label"></label>
+            <input asp-for="adres" class="form-control" />
+            <span asp-validation-for="adres" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="telefon" class="control-label"></label>
+            <input asp-for="telefon" class="form-control" />
+            <span asp-validation-for="telefon" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="telefon2" class="control-label"></label>
+            <input asp-for="telefon2" class="form-control" />
+            <span asp-validation-for="telefon2" class="text-danger"></span>
+        </div>
+        <input type="hidden" name="addedkursID" id="addedkursID" />
+        <div class="form-group">
+            <input type="submit" value="Yarat" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+
+<script>
+    $(document).ready(function () {
+        kisiListOpen();
+        $("#addedkursID").val(TheKursID);
+    });
+
+    $(".emailaranacak").change(function () {
+        KisiListesiGuncelle($(this).val());
+    });
+    $(".ulkearanacak").change(function () {
+        KisiListesiGuncelle($(this).val());
+    });
+    $(".isimaranacak").change(function () {
+        KisiListesiGuncelle($(this).val());
+        });
+    $(".soyisimaranacak").change(function () {
+        KisiListesiGuncelle($(this).val());
+    });
+
+    $("#KisiEklenecekForm").submit(function (e) {
+        e.preventDefault();
+        KisiEkleFormGonder($("#KisiEklenecekForm").serialize());
+        KisiEklenecek();
+    })
+</script>

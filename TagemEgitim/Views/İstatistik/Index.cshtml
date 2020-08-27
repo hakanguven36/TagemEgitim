@@ -1,0 +1,45 @@
+﻿
+@{
+    ViewData["Title"] = "İstatistik";
+    string firstDay = DateTime.Now.Year + "-01" + "-01";
+    string lastDay = DateTime.Now.Year + "-12" + "-31";
+
+}
+
+
+<h3>İstatistikler</h3>
+
+
+<div class="input-group">
+    <input type="date" class="form-control" name="tarihStart" id="tarihStart" value="@firstDay" />
+    <input type="date" class="form-control" name="tarihEnd" id="tarihEnd" value="@lastDay" />
+    <button class="btn btn-outline-primary form-control" onclick="Getir()">Getir</button>
+    <button class="btn btn-outline-warning form-control ml-4" onclick="GelismisFiltreleme()">Gelişmiş Filtreleme</button>
+</div>
+
+<div id="istatistikDiv"></div>
+
+<script>
+    function Getir() {
+
+        if ($("#tarihStart").val() == "" || $("#tarihEnd").val() == "") {
+            new OzModal().Bilgi("Tarihler boş olamaz.", 1200);
+            return;
+        }
+
+        $("#istatistikDiv").html($(".bekleyiniz").html());
+        new OzAjax("/İstatistik/Listele", GET, { tarihStart: $("#tarihStart").val(), tarihEnd: $("#tarihEnd").val() }, getirBasari).BasitGonder();
+        function getirBasari(data) {
+            $("#istatistikDiv").html(data);
+        }
+    }
+
+    function GelismisFiltreleme() {
+        new OzAjax("/İstatistik/GelismisFiltreleme", GET, null, gelismisFiltreBasari).BasitGonder();
+        function gelismisFiltreBasari(data) {
+             $("#istatistikDiv").html(data);
+        }
+    }
+
+</script>
+

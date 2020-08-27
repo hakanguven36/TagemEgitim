@@ -1,0 +1,170 @@
+﻿@{
+    ViewData["Title"] = "Kişiler";
+
+    var ülkeList = (List<Ülke>)ViewBag.ülkeList;
+}
+<h3>Kişi Listesi</h3>
+
+<div class="input-group d-print-none">
+    <button class="btn btn-success" onclick="KisiYaratFormAc()" ><span class="fas fa-plus"></span> Yeni</button>
+    &nbsp;&nbsp;
+    <input class="form-control" id="searchBox" placeholder="Ara... (isim, eposta, kurum)" />
+    <select class="form-control" id="ulkeBox">
+        <option value=0>Tüm Ülkeler...</option>
+        @foreach (var item in ülkeList)
+        {
+            <option value="@item.ID">@item.isim</option>
+        }
+    </select>
+    <button class="btn btn-outline-dark" onclick="FiltreTemizle()">Filtreleri Temizle</button>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a id="sonucBox">Sonuçlar getiriliyor</a>
+</div>
+
+<div id="kisilerDiv"><center><div class="h1 dot-bricks"></div><br /><h5><i> Yükleniyor </i></h5></center></div>
+
+<script>
+    $(document).ready(function () {
+        Listele();
+    });
+
+    var filterObj = {
+        search : "",
+        ulkeID : 0,
+        order : "",
+        desc : false,
+        pageNo: 1
+    };
+
+    // #region Liste Filtre Pagination
+    function Listele() {
+        new OzAjax("/Kişiler/Listele", GET, filterObj, listeleBasari).BasitGonder();
+        function listeleBasari(data) {
+            $("#kisilerDiv").html(data);
+        }
+    }
+
+    //Filtreleri Temizle
+    function FiltreTemizle() {
+        filterObj = {
+            search: "",
+            ulkeID: 0,
+            order: "",
+            desc: false,
+            pageNo: 1
+        };
+        $("#ulkeBox").val(0);
+        $("#searchBox").val("");
+        Listele();
+    }
+    //Filtre Ulke
+    $("#ulkeBox").change(function () {
+        filterObj.ulkeID = Number($("#ulkeBox").val());
+        Listele();
+    });
+
+    //Filtre orderBy
+    var orderWordOld = "";
+    function FiltreOrderBy(orderWord) {
+        filterObj.order = orderWord;
+        if (orderWord == orderWordOld) {
+            filterObj.desc = !filterObj.desc;
+        }
+        else {
+            filterObj.desc = false;
+        }
+        orderWordOld = orderWord;
+        Listele();
+    }
+
+    //Filtre search
+    var delaySearchTimer;
+    $("#searchBox").keyup(function () {
+        var aranan = $("#searchBox").val();
+        if (aranan.length > 2 || aranan == "" || aranan == null) {
+            clearTimeout(delaySearchTimer);
+            delaySearchTimer = setTimeout(function () {
+                filterObj.search = aranan;
+                Listele();
+            }, 1200);
+        }
+    });
+
+    //Filtre pagination
+    function FiltreSayfayaGit(pageNo) {
+        filterObj.pageNo = pageNo;
+        Listele();
+    }
+    // #endregion
+
+    function KisiYaratFormAc() {
+        new OzAjax("/Kişiler/Yarat", GET, null, kisiYaratFormAcBasari).BasitGonder();
+        function kisiYaratFormAcBasari(data) {
+            new OzModal().Sayfa(data);
+        }
+    }
+    function KisiYarat(formSerialized) {
+        new OzAjax("/Kişiler/Yarat", POST, formSerialized, kisiYaratBasari).BasitGonder();
+        function kisiYaratBasari(data) {
+            if (data == '"Tamam"') {
+                Listele();
+                new OzModal().Kapat();
+            }
+            else {
+                new OzModal().Sayfa(data);
+            }
+        }
+    }
+
+    function KisiDetay(kisiID) {
+        new OzAjax("/Kişiler/Detay", GET, { id: kisiID }, kisiDetayBasari).BasitGonder();
+        function kisiDetayBasari(data) {
+            new OzModal().Sayfa(data);
+        }
+    }
+    function KisiDuzenleFormAc(kisiID) {
+        new OzAjax("/Kişiler/Düzenle", GET, { id: kisiID }, kisiYaratFormAcBasari).BasitGonder();
+        function kisiYaratFormAcBasari(data) {
+            new OzModal().Sayfa(data);
+        }
+    }
+    function KisiDuzenle(formSerialized) {
+        new OzAjax("/Kişiler/Düzenle", POST, formSerialized, kisiDuzenleBasari).BasitGonder();
+        function kisiDuzenleBasari(data) {
+            if (data == '"Tamam"') {
+                Listele();
+                new OzModal().Kapat();
+            }
+            else {
+                new OzModal().Sayfa(data);
+            }
+        }
+    }
+
+    function KisiSil(kisiID) {
+        var silonay = new OzOnay();
+        silonay.soruTxt = "Bu kişi silinecek! (ve katılımlar silinecek)</br> Onaylıyor musunuz?";
+        silonay.evetTxt = "Sil!";
+        silonay.hayirTxt = "İptal";
+        silonay.soruCls = "h2 text-danger";
+        silonay.evetCls = "btn btn-danger";
+        silonay.hayirCls = "btn btn-secondary";
+        silonay.Sor(evetSilFun, hayirSilmeFun);
+        function evetSilFun() {
+            new OzAjax("/Kişiler/Sil", POST, { id: kisiID }, kisiSilBasari).BasitGonder();
+            function kisiSilBasari(data) {
+                if (data == '"Tamam"') {
+                    Listele();
+                    silonay.sorumodal.Kapat();
+                }
+                else {
+                    new OzModal().Sayfa(data);
+                }
+            }
+        }
+        function hayirSilmeFun() {
+            silonay.sorumodal.Kapat();
+        }
+    }
+</script>
+

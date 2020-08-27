@@ -1,0 +1,64 @@
+﻿@model TagemEgitim.ViewModels.HesaplarViewModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutGiris.cshtml";
+}
+<div style="background-color:rgba(200,200,200,.2); padding:2em; border-radius:1em">
+    <br />
+    <h4> Uluslararası Tarımsal Araştırma ve Eğitim Merkezi </h4>
+    <h2>Eğitim Veritabanı Uygulaması</h2>
+<hr />
+</div>
+<br />
+<div class="form-row">
+    <div class="col-sm-8">
+        <div id="gelecekEgitimler" style="background-color:rgba(200,200,200,.2); padding:2em; border-radius:1em">
+            <center>
+                <i>
+                    Gelecek Eğitimler Yükleniyor..
+                </i>
+                <br />
+                <img src="~/resim/source.gif" height="200" />
+            </center>
+        </div>
+    </div>
+    <div class="col-sm-4" style="background-color:rgba(200,200,200,.2); padding:2em; border-radius:1em">
+        <h2>Kullanıcı Girişi</h2>
+        <form asp-action="Index">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="username" class="control-label"></label>
+                <input asp-for="username" class="form-control"/>
+                <span asp-validation-for="username" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="password" class="control-label"></label>
+                <input asp-for="password" class="form-control" />
+                <span asp-validation-for="password" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="remember" /> @Html.DisplayNameFor(model => model.remember)
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Giriş" class="btn btn-secondary form-control" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        setTimeout(GelecekEgitimlerGuncelle,1000);
+    });
+    function GelecekEgitimlerGuncelle() {
+        new OzAjax("/Hesaplar/GelecekEğitimler", GET, null, gelecekEgitimlerBasari).BasitGonder();
+        function gelecekEgitimlerBasari(data) {
+            $("#gelecekEgitimler").html(data);
+        }
+    }
+</script>
+
+

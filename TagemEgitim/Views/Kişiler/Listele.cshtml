@@ -1,0 +1,136 @@
+﻿@model IEnumerable<TagemEgitim.Models.Kişi>
+
+@{
+    ViewData["Title"] = "Index";
+    PaginationViewModel pagination = (PaginationViewModel)ViewBag.pagination;
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <span class="FiltreOrderMeSpan" onclick="FiltreOrderBy('isim')" id="isim">
+                    @Html.DisplayNameFor(model => model.isim)
+                </span>
+            </th>
+            <th>
+                <span class="FiltreOrderMeSpan" onclick="FiltreOrderBy('soyisim')" id="soyisim">
+                    @Html.DisplayNameFor(model => model.soyisim)
+                </span>
+            </th>
+            <th>
+                <span class="FiltreOrderMeSpan" onclick="FiltreOrderBy('ünvan.ID')" id="ünvan">
+                    @Html.DisplayNameFor(model => model.ünvan)
+                </span>
+            </th>
+            <th>
+                <span class="FiltreOrderMeSpan" onclick="FiltreOrderBy('cinsiyet')" id="cinsiyet">
+                    @Html.DisplayNameFor(model => model.cinsiyet)
+                </span>
+            </th>
+            <th>
+                <span class="FiltreOrderMeSpan" onclick="FiltreOrderBy('doğumTarihi')" id="doğumTarihi">
+                    @Html.DisplayNameFor(model => model.doğumTarihi)
+                </span>
+            </th>
+            <th>
+                <span class="FiltreOrderMeSpan" onclick="FiltreOrderBy('ülke.isim')" id="ülke">
+                    @Html.DisplayNameFor(model => model.ülke)
+                </span>
+            </th>
+            <th>
+                Katıldığı Kurslar
+            </th>
+            
+            <th class="d-print-none"></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.isim)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.soyisim)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ünvan.isim)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.cinsiyet)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.doğumTarihi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ülke.isim)
+            </td>
+            <td>
+                @foreach (var kk in item.kişikurs)
+                {
+                    <a asp-controller="Kurslar" asp-action="Index" asp-route-id="@kk.kursID">
+                        @kk.kurs.isim
+                    </a><br />
+                }
+            </td>
+            <td class="btn-group d-print-none">
+                <button class="btn btn-sm btn-outline-primary" onclick="KisiDetay(@item.ID)"><span class="fas fa-search"></span></button> 
+                <button class="btn btn-sm btn-outline-warning" onclick="KisiDuzenleFormAc(@item.ID)"><span class="fas fa-pen"></span></button> 
+                <button class="btn btn-sm btn-outline-danger" onclick="KisiSil(@item.ID)"><span class="fas fa-trash"></span></button>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+@if (pagination.totalPage > 1)
+{
+<div class="btn-group" id="paginationDiv">
+
+    @{
+        int öncekiSayfa = pagination.currentPage - 1;
+        int sonrakiSayfa = pagination.currentPage + 1;
+    }
+
+    @if (pagination.isFirstPage)
+    {
+    <button class="pageButtonOnceki" disabled>&lt;&lt; Önceki</button>
+    }
+    else
+    {
+<button class="pageButtonOnceki" onclick="FiltreSayfayaGit(@öncekiSayfa)">&lt;&lt; Önceki</button>
+    }
+    @for (int i = 1; i <= pagination.totalPage; i++)
+    {
+        <button class="pageButton" onclick="FiltreSayfayaGit(@i)" @if (pagination.currentPage == i) { <text> disabled </text> }>@i</button>
+    }
+    @if (pagination.isLastPage)
+    {
+        <button class="pageButtonSonraki" disabled>Sonraki >> </button>
+    }
+    else
+    {
+        <button class="pageButtonSonraki" onclick="FiltreSayfayaGit(@sonrakiSayfa)">Sonraki >></button>
+    }
+
+</div>
+}
+
+<script>
+    filterObj.pageNo = Number('@pagination.currentPage');
+    $("#sonucBox").html("Toplam " + '@pagination.itemCount' + " sonuç bulundu.");
+
+    $(document).ready(function () {
+        if (filterObj.order != "") {
+            var resimOrdered = '<img src="/resim/orderSymbol.png" height="18" />';
+            var x = "";
+            if (filterObj.order.includes("."))
+                x = filterObj.order.slice(0, filterObj.order.indexOf("."));
+            else
+                x = filterObj.order;
+            $("#" + x).before(resimOrdered);
+        }
+    });
+
+    
+</script>
+

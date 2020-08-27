@@ -1,0 +1,53 @@
+﻿@model TagemEgitim.Models.Kullar
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>Kullar</h4>
+<hr />
+<div>
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="ID" />
+        <div class="form-group">
+            <label asp-for="kulname" class="control-label"></label>
+            <input asp-for="kulname" class="form-control" />
+            <span asp-validation-for="kulname" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="kulpass" class="control-label"></label>
+            <input asp-for="kulpass" class="form-control" />
+            <span asp-validation-for="kulpass" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="hatali" class="control-label"></label>
+            <input asp-for="hatali" class="form-control" />
+            <span asp-validation-for="hatali" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="kilitliTarih" class="control-label"></label>
+            <input asp-for="kilitliTarih" class="form-control" />
+            <span asp-validation-for="kilitliTarih" class="text-danger"></span>
+        </div>
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" asp-for="admin" /> @Html.DisplayNameFor(model => model.admin)
+            </label>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

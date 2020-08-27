@@ -1,0 +1,61 @@
+﻿@model TagemEgitim.Models.Kurs
+
+<h4>Kurs Düzenle</h4>
+<hr />
+<div>
+    <form id="KursDuzenleForm">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="ID" />
+        <div class="form-group">
+            <label asp-for="isim" class="control-label"></label>
+            <input asp-for="isim" class="form-control" />
+            <span asp-validation-for="isim" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="isimEN" class="control-label"></label>
+            <input asp-for="isimEN" class="form-control" />
+            <span asp-validation-for="isimEN" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="tarihBasla" class="control-label"></label>
+            <input asp-for="tarihBasla" class="form-control" />
+            <span asp-validation-for="tarihBasla" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="tarihBitis" class="control-label"></label>
+            <input asp-for="tarihBitis" class="form-control" />
+            <span asp-validation-for="tarihBitis" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ulustürü" class="control-label"></label>
+            <select asp-for="ulustürü" class="form-control" asp-items="Html.GetEnumSelectList<ULUSTÜRÜ>()"></select>
+            <span asp-validation-for="ulustürü" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="evtürü" class="control-label"></label>
+            <select asp-for="evtürü" class="form-control" asp-items="Html.GetEnumSelectList<EVTÜRÜ>()"></select>
+            <span asp-validation-for="evtürü" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="toplantıtürü" class="control-label"></label>
+            <select asp-for="toplantıtürü" class="form-control" asp-items="Html.GetEnumSelectList<TOPLANTITÜRÜ>()"></select>
+            <span asp-validation-for="toplantıtürü" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="notlar" class="control-label"></label>
+            <input asp-for="notlar" class="form-control" />
+            <span asp-validation-for="notlar" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Kaydet" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+
+<script>
+    $("#KursDuzenleForm").submit(function (e) {
+        e.preventDefault();
+        KursDuzenle($("#KursDuzenleForm"));
+    })
+</script>
+

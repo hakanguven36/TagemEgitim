@@ -1,0 +1,19 @@
+﻿@model IEnumerable<TagemEgitim.Models.Ülke>
+
+
+    <table style="width:20em">
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.isim)
+            </td>
+
+            <td>
+                <btn class="btn btn-outline-warning" onclick="UlkeDuzenleFormAc(@item.ID)"><span class="fas fa-pen"></span></btn>
+                <btn class="btn btn-outline-danger" onclick="UlkeSil(@item.ID)"><span class="fas fa-trash"></span></btn>
+            </td>
+        </tr>
+        }
+    </table>
+

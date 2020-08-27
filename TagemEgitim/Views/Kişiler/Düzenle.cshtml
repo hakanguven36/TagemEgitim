@@ -1,0 +1,89 @@
+﻿@model TagemEgitim.Models.Kişi
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h3>Kişi Düzenle</h3>
+<hr />
+<div>
+    <form id="kisiDuzenleForm">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="ID" />
+        <div class="form-group">
+            <label asp-for="isim" class="control-label"></label>
+            <input asp-for="isim" class="form-control" />
+            <span asp-validation-for="isim" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="soyisim" class="control-label"></label>
+            <input asp-for="soyisim" class="form-control" />
+            <span asp-validation-for="soyisim" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ünvanID" class="control-label"></label>
+            <select asp-for="ünvanID" class="form-control" asp-items="ViewBag.ünvanID"></select>
+            <span asp-validation-for="ünvanID" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="cinsiyet" class="control-label"></label>
+            <select asp-for="cinsiyet" class="form-control" asp-items="Html.GetEnumSelectList<CİNSİYET>()"></select>
+            <span asp-validation-for="cinsiyet" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="doğumTarihi" class="control-label"></label>
+            <input asp-for="doğumTarihi" class="form-control" />
+            <span asp-validation-for="doğumTarihi" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ülkeID" class="control-label"></label>
+            <select asp-for="ülkeID" class="form-control" asp-items="ViewBag.ülkeID"></select>
+            <span asp-validation-for="ülkeID" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="adres" class="control-label"></label>
+            <input asp-for="adres" class="form-control" />
+            <span asp-validation-for="adres" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="kurum" class="control-label"></label>
+            <input asp-for="kurum" class="form-control" />
+            <span asp-validation-for="kurum" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="görev" class="control-label"></label>
+            <input asp-for="görev" class="form-control" />
+            <span asp-validation-for="görev" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="email" class="control-label"></label>
+            <input asp-for="email" class="form-control" />
+            <span asp-validation-for="email" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="email2" class="control-label"></label>
+            <input asp-for="email2" class="form-control" />
+            <span asp-validation-for="email2" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="telefon" class="control-label"></label>
+            <input asp-for="telefon" class="form-control" />
+            <span asp-validation-for="telefon" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="telefon2" class="control-label"></label>
+            <input asp-for="telefon2" class="form-control" />
+            <span asp-validation-for="telefon2" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Kaydet" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+
+<script>
+    $("#kisiDuzenleForm").submit(function (e) {
+        e.preventDefault();
+        KisiDuzenle($("#kisiDuzenleForm").serialize());
+    });
+</script>

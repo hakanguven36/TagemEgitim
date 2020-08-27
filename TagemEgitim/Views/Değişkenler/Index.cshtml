@@ -1,0 +1,111 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Değişkenler</h3>
+<br />
+<div style="border:solid 2px lightgray; padding:1em">
+    <h4>Ünvanlar <a class="btn btn-sm btn-outline-success" id="unvanYaratBtn"><span class="fas fa-plus"></span></a></h4>
+    <hr />
+    <div id="unvanListDiv"></div>
+</div>
+<br />
+<div style="border:solid 2px lightgray; padding:1em">
+    <h4>Ülkeler <a class="btn btn-sm btn-outline-success" id="ulkeYaratBtn"><span class="fas fa-plus"></span></a></h4>
+    <hr />
+    <div id="ulkeListDiv"></div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        ListeleUnvan();
+        ListeleUlke();
+    });
+    function Listele(data) {
+        if (data == '"Tamam"') {
+            ListeleUnvan();
+            ListeleUlke();
+            new OzModal().Kapat();
+        }
+        else new OzModal().Sayfa(data);
+    }
+    function ListeleUnvan() {
+        new OzAjax("/Değişkenler/ListeleUnvan", GET, null, ListeleUnvanBasari).BasitGonder();
+        function ListeleUnvanBasari(data) {
+            $("#unvanListDiv").html(data);
+        }
+    }
+    function ListeleUlke() {
+        new OzAjax("/Değişkenler/ListeleUlke", GET, null, ListeleUlkeBasari).BasitGonder();
+        function ListeleUlkeBasari(data) {
+            $("#ulkeListDiv").html(data);
+        }
+    }
+
+    $("#unvanYaratBtn").click(function () {
+        new OzAjax("/Değişkenler/YaratUnvan", GET, null, yaratUnvanFormBasari).BasitGonder();
+        function yaratUnvanFormBasari(data) {
+            new OzModal().Sayfa(data, "Ünvan Yarat");
+        }
+    });
+    $("#ulkeYaratBtn").click(function () {
+        new OzAjax("/Değişkenler/YaratUlke", GET, null, yaratUlkeFormBasari).BasitGonder();
+        function yaratUlkeFormBasari(data) {
+            new OzModal().Sayfa(data, "Ülke Yarat");
+        }
+    });
+    function YaratUnvan(fs) {
+        new OzAjax("/Değişkenler/YaratUnvan", POST, fs, unvanYaratBasari).BasitGonder();
+        function unvanYaratBasari(data) {
+            Listele(data);
+        }
+    }
+    function YaratUlke(fs) {
+        new OzAjax("/Değişkenler/YaratUlke", POST, fs, ulkeYaratBasari).BasitGonder();
+        function ulkeYaratBasari(data) {
+            Listele(data);
+        }
+    }
+
+    function UnvanDuzenleFormAc(id) {
+        new OzAjax("/Değişkenler/DüzenleUnvan", GET, { id: id }, UnvanDuzenleFormBasari).BasitGonder();
+        function UnvanDuzenleFormBasari(data) {
+            new OzModal().Sayfa(data, "Ünvan Düzenle");
+        }
+    }
+    function UlkeDuzenleFormAc(id) {
+        new OzAjax("/Değişkenler/DüzenleUlke", GET, { id: id }, UlkeDuzenleFormBasari).BasitGonder();
+        function UlkeDuzenleFormBasari(data) {
+            new OzModal().Sayfa(data, "Ülke Düzenle");
+        }
+    }
+
+    function DuzenleUnvan(fs) {
+        new OzAjax("/Değişkenler/DüzenleUnvan", POST, fs, unvanDuzenleBasari).BasitGonder();
+        function unvanDuzenleBasari(data) {
+            Listele(data);
+        }
+    }
+    function DuzenleUlke(fs) {
+        new OzAjax("/Değişkenler/DüzenleUlke", POST, fs, ulkeDuzenleBasari).BasitGonder();
+        function ulkeDuzenleBasari(data) {
+            Listele(data);
+        }
+    }
+
+    function UnvanSil(id) {
+        new OzAjax("/Değişkenler/SilUnvan", POST, { id: id }, UnvanSilBasari).BasitGonder();
+        function UnvanSilBasari(data) {
+            Listele(data);
+        }
+    }
+    function UlkeSil(id) {
+        new OzAjax("/Değişkenler/SilUlke", POST, { id: id }, UlkeSilBasari).BasitGonder();
+        function UlkeSilBasari(data) {
+            Listele(data);
+        }
+    }
+</script>
+

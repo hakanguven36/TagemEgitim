@@ -1,0 +1,73 @@
+﻿@model IEnumerable<TagemEgitim.Models.Kurs>
+@{
+    var pagination = ViewBag.pagination;
+}
+<h3>Kurslar</h3>
+<table class="table">
+    <tr>
+        <th>
+            İsim
+        </th>
+        <th>
+            Tarih
+        </th>
+        <th>
+            Ulus -
+            Ev -
+            Toplantı
+        </th>
+    </tr>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="kursSatir" onclick="SelectKurs(@item.ID)" id="kursdom_@item.ID">
+                <td>
+                    @Html.DisplayFor(modelItem => item.isim) <br />
+                    [@Html.DisplayFor(modelItem => item.isimEN)]
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.tarihBasla) -
+                    @Html.DisplayFor(modelItem => item.tarihBitis)
+                    [@Html.DisplayFor(modelItem => item.kursSuresi)]
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ulustürü) -
+                    @Html.DisplayFor(modelItem => item.evtürü) -
+                    @Html.DisplayFor(modelItem => item.toplantıtürü)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@if (pagination.totalPage > 1)
+{
+    <div class="btn-group" id="paginationDiv">
+
+        @{
+            int öncekiSayfa = pagination.currentPage - 1;
+            int sonrakiSayfa = pagination.currentPage + 1;
+        }
+
+        @if (pagination.isFirstPage)
+        {
+            <button class="pageButtonOnceki" disabled>&lt;&lt; Önceki</button>
+        }
+        else
+        {
+            <button class="pageButtonOnceki" onclick="SayfayaGit(@öncekiSayfa)">&lt;&lt; Önceki</button>
+        }
+        @for (int i = 1; i <= pagination.totalPage; i++)
+        {
+            <button class="pageButton" onclick="SayfayaGit(@i)" @if (pagination.currentPage == i) { <text> disabled </text> }>@i</button>
+        }
+        @if (pagination.isLastPage)
+        {
+            <button class="pageButtonSonraki" disabled>Sonraki >> </button>
+        }
+        else
+        {
+            <button class="pageButtonSonraki" onclick="SayfayaGit(@sonrakiSayfa)">Sonraki >></button>
+        }
+
+    </div>
+}

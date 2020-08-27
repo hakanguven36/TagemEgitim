@@ -1,0 +1,63 @@
+﻿@model TagemEgitim.Models.Kurs
+
+@if (Model == null)
+{
+    <h5>Katılım Listesi - Bir kurs seçin... </h5>
+}
+else
+{ 
+<div>
+    <h3>Katılım Listesi <a class="btn btn-warning" asp-controller="Katılımlar" asp-action="Index" asp-route-id="@Model.ID"> Düzenle </a></h3>
+    <hr />
+    <h5>
+        @Model.isim<br />
+        [@Model.isimEN]
+    </h5>
+    <h6>
+        Toplam Katılımcı: @(Model.kişikurs.Count + Model.obscures.Sum(u=>u.sayı))
+    </h6>
+    <hr />
+    <h4>Kişiler</h4>
+    <table class="table">
+        <tr>
+            <th>Kişi</th>
+            <th>Ülke</th>
+            <th>Katılım Şekli</th>
+        </tr>
+        @foreach (var kisikurs in Model.kişikurs)
+        {
+            <tr>
+                <td>
+                    @kisikurs.kişi.ünvan.isim
+                    @kisikurs.kişi.tamisim
+                </td>
+                <td>
+                    @kisikurs.kişi.ülke.isim
+                </td>
+                <td>
+                    @kisikurs.katılımŞekli
+                </td>
+            </tr>
+
+        }
+    </table>
+    <h4>Gruplar</h4>
+    <table class="table">
+        <tr>
+            <th>Grup Adı</th>
+            <th>Sayı</th>
+        </tr>
+        @foreach (var obs in Model.obscures)
+        {
+            <tr>
+                <td>
+                    @obs.isim
+                </td>
+                <td>
+                    @obs.sayı
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+}

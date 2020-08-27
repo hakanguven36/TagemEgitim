@@ -1,0 +1,30 @@
+﻿@model IEnumerable<TagemEgitim.Models.Kurs>
+
+@{
+    int A = Model.Count();
+    int B = Model.SelectMany(u => u.kişikurs).Count();
+    int C = Model.SelectMany(u => u.obscures).Sum(u => u.sayı);
+    int D = B + C;
+}
+
+<div style="margin:4em">
+
+    <table class="table bg-warning" style="padding:2em">
+        <thead>
+            <tr>
+                <th>Kurs Sayısı</th>
+                <th>Kişi Sayısı</th>
+                <th>Obscure Sayısı</th>
+                <th>Toplam</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@A</td>
+                <td>@B</td>
+                <td>@C</td>
+                <td>@D</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

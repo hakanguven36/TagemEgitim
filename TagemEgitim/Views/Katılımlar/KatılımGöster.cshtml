@@ -1,0 +1,105 @@
+﻿@model TagemEgitim.Models.Kurs
+
+<div class="row" style="display:inline-block">
+    <div class="col">
+        <h4>
+            <span onclick="KursaGeriDon(@Model.ID)" style="cursor:pointer">
+                @Model.isim
+            </span>
+        </h4>
+    </div>
+    <div class="col">
+        <h4>
+            [@Model.isimEN]
+        </h4>
+    </div>
+</div>
+
+<h3>Katılım Listesi</h3>
+<h6>
+    Toplam Katılımcı: @(Model.kişikurs.Count + Model.obscures.Sum(u=>u.sayı))
+</h6>
+
+<hr />
+<h4>Kişiler (@Model.kişikurs.Count) <span onclick="KisiEklenecek()" class="text-success fas fa-plus-circle"></span> </h4>
+<table class="table">
+    <tr>
+        <th>Kişi</th>
+        <th>Ülke</th>
+        <th>Katılım Şekli</th>
+        <th></th>
+    </tr>
+    @foreach (var kisikurs in Model.kişikurs)
+    {
+        <tr>
+            <td>
+                @kisikurs.kişi.ünvan.isim
+                @kisikurs.kişi.tamisim
+            </td>
+            <td>
+                @kisikurs.kişi.ülke.isim
+            </td>
+            <td style="cursor:pointer">
+                <span onclick="KatSekliDegistir($(this).parent(), @kisikurs.kişiID)">
+                    @kisikurs.katılımŞekli
+                </span>
+            </td>
+            <td>
+                <button class="btn btn-sm btn-outline-secondary" onclick="KisiDetay(@kisikurs.kişiID)"><span class="fas fa-search"></span></button>
+                <button class="btn btn-sm btn-outline-danger" onclick="KatilimSil(@kisikurs.ID)">
+                    <span class="fas fa-ban"></span>
+                </button>
+            </td>
+        </tr>
+
+    }
+</table>
+<h4>Gruplar (@Model.obscures.Sum(u => u.sayı)) <span onclick="GrupEklenecek()" class="text-success fas fa-plus-circle"></span> </h4>
+<table class="table">
+    <tr>
+        <th>Grup Adı</th>
+        <th>Sayı</th>
+        <th></th>
+    </tr>
+    @foreach (var obs in Model.obscures)
+    {
+        <tr>
+            <td>
+                @obs.isim
+            </td>
+            <td>
+                @obs.sayı
+            </td>
+            <td>
+                <button class="btn btn-sm btn-outline-danger" onclick="ObscureSil(@obs.ID)">
+                    <span class="fas fa-ban"></span>
+                </button>
+            </td>
+        </tr>
+    }
+</table>
+
+<div class="collapse" id="yeniKatSekliDiv" >
+    <select class="form-control" onchange="YeniKatSekli($(this).val())">
+        <option value="">Seçiniz</option>
+        @foreach (var item in Html.GetEnumSelectList<KATILIMŞEKLİ>())
+        {
+            <option value="@item.Value">@item.Text</option>
+        }
+    </select>
+</div>
+
+<script>
+    var mevcutKatSekli = "";
+    var KatSekKisiID = 0;
+    function KatSekliDegistir(tdDom, _KatSekKisiID) {
+        KatSekKisiID = _KatSekKisiID;
+        mevcutKatSekli = $(tdDom).html();
+        $(tdDom).html($("#yeniKatSekliDiv").html());
+    }
+
+    function KursaGeriDon(kursID) {
+        window.location = "/Kurslar/Index/" + kursID;
+    }
+
+</script>

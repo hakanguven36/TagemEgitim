@@ -1,0 +1,79 @@
+﻿@model TagemEgitim.Models.Kullar
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Kullar</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.kulname)
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.kulname)
+        </dd>
+        <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.kulpass)
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.kulpass)
+        </dd>
+        <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.kulpassEnc)
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.kulpassEnc)
+        </dd>
+        <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.hatirla)
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.hatirla)
+        </dd>
+        <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.cerez)
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.cerez)
+        </dd>
+        <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.cerezEnc)
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.cerezEnc)
+        </dd>
+        <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.hatali)
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.hatali)
+        </dd>
+        <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.kilitliTarih)
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.kilitliTarih)
+        </dd>
+        <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.admin)
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.admin)
+        </dd>
+        <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.adminCode)
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.adminCode)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

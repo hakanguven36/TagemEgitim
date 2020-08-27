@@ -1,0 +1,154 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+<input type="hidden" value="@ViewBag.TheKursID" id="TheKursID" />
+
+<div class="row m-2">
+    <div class="col" id="katilimListesiDiv">
+        
+    </div>
+    <div class="col" id="eklemeDiv" style="border-left:solid 1em lightgray; transition:.3s">
+
+    </div>
+    <div class="col collapse" id="kisiListDiv" style="border-left:solid 1em lightgray; transition:.3s">
+
+    </div>
+</div>
+
+<script>
+    var TheKursID = 0;
+    $(document).ready(function () {
+        TheKursID = Number($("#TheKursID").val());
+        KatilimGoster();
+    });
+
+    function KatilimGoster() {
+        new OzAjax("/Katılımlar/KatılımGöster", GET, {kursID : TheKursID}, katilimGosterBasari).BasitGonder();
+        function katilimGosterBasari(data) {
+            $("#katilimListesiDiv").html(data);
+        }
+    }
+
+    function KisiEklenecek() {
+        new OzAjax("/Katılımlar/KisiEklenecek", GET, { kursID: TheKursID }, kisiEklenecekBasari).BasitGonder();
+        function kisiEklenecekBasari(data) {
+            $("#eklemeDiv").html(data)
+        }
+    }
+    function kisiListOpen() {
+        $("#kisiListDiv").show(400);
+    }
+    function kisiListClose(){
+        $("#kisiListDiv").hide(400);
+    }
+
+    var sendobj = {
+        email: "",
+        isim: "",
+        soyisim: "",
+        ulke:0
+    }
+
+    function FiltreAyarla() {
+        sendobj.email = $(".emailaranacak").val();
+        sendobj.isim = $(".isimaranacak").val();
+        sendobj.soyisim = $(".soyisimaranacak").val();
+        sendobj.ulke = Number($(".ulkearanacak").val());
+    }
+    function KisiListesiGuncelle() {
+        FiltreAyarla();
+        new OzAjax("/Katılımlar/KisiAraListele", GET, sendobj, kisiAraListeGuncelleBasari).BasitGonder();
+        function kisiAraListeGuncelleBasari(data) {
+            $("#kisiListDiv").html(data);
+        }
+    }
+
+    function KisiEkleFormGonder(formSerialized) {
+        new OzAjax("/Katılımlar/KişiEkle", POST,  formSerialized, kisiEkleKursaEkleBasari).BasitGonder();
+        function kisiEkleKursaEkleBasari(data) {
+            if (data == '"Tamam"')
+                KatilimGoster();
+            else {
+                new OzModal().Sayfa(data);
+            }
+        }
+    }
+
+    function GrupEklenecek() {
+        new OzAjax("/Katılımlar/GrupEklenecek", GET, { kursID: TheKursID }, grupEklenecekBasari).BasitGonder();
+        function grupEklenecekBasari(data) {
+            $("#eklemeDiv").html(data)
+        }
+    }
+
+    function GrupEkleFormGonder(formSerialized) {
+        new OzAjax("/Katılımlar/GrupEkle", POST, formSerialized, grupEkleKursaEkleBasari).BasitGonder();
+        function grupEkleKursaEkleBasari(data) {
+            if (data == '"Tamam"')
+                KatilimGoster();
+            else {
+                new OzModal().Sayfa(data);
+            }
+        }
+    }
+
+
+    function YeniKatSekli(katSekliItemID) {
+
+        var ksDegistirOBJ = {
+            kursID: Number(TheKursID),
+            kisiID: Number(KatSekKisiID),
+            katset: Number(katSekliItemID)
+        };
+        new OzAjax("/Katılımlar/KatılımŞekliDeğiştir", POST, ksDegistirOBJ, ksDegistirBasari).BasitGonder();
+        function ksDegistirBasari(data) {
+            if (data == '"Tamam"')
+                KatilimGoster();
+            else {
+                new OzModal().Sayfa(data);
+            }
+        }
+    }
+
+    function KatilimSil(silinecekKisikursID) {
+        new OzAjax("/Katılımlar/KatılımSil", POST, {kisikursID: silinecekKisikursID}, katilimSilBasari).BasitGonder();
+        function katilimSilBasari(data) {
+            if (data == '"Tamam"')
+                KatilimGoster();
+            else {
+                new OzModal().Sayfa(data);
+            }
+        }
+    }
+
+    function ObscureSil(silinecekObsID) {
+        new OzAjax("/Katılımlar/ObscureSil", POST, { obsID: silinecekObsID }, obsSilBasari).BasitGonder();
+        function obsSilBasari(data) {
+            if (data == '"Tamam"')
+                KatilimGoster();
+            else {
+                new OzModal().Sayfa(data);
+            }
+        }
+    }
+
+    function MevcutListedenEkle(kisiID) {
+        new OzAjax("/Katılımlar/MevcutKişiyiKursaEkle", POST, { kisiID: kisiID, kursID: TheKursID }, mevcutKisiKursaEkleBasari).BasitGonder();
+        function mevcutKisiKursaEkleBasari(data) {
+            if (data == '"Tamam"')
+                KatilimGoster();
+            else {
+                new OzModal().Sayfa(data);
+            }
+        }
+    }
+
+    function KisiDetay(kisiID) {
+        new OzAjax("/Kişiler/Detay", GET, { id: kisiID }, kisiDetayBasari).BasitGonder();
+        function kisiDetayBasari(data) {
+            new OzModal().Sayfa(data);
+        }
+    }
+
+</script>

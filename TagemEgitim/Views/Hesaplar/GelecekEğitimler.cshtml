@@ -1,0 +1,31 @@
+﻿@model IEnumerable<TagemEgitim.Models.Kurs>
+
+<h4>Gelecek Eğitimler</h4>
+<br />
+@if(Model.Count() == 0)
+{
+    <h5>Gelecek eğitimler henüz girilmedi!</h5>
+}
+else
+{
+<table class="table table-bordered">
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.isim)
+                @if (!string.IsNullOrWhiteSpace(item.isimEN))
+                {
+                    <span>(@Html.DisplayFor(modelItem => item.isimEN))</span>
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.tarihBasla)
+                -
+                @Html.DisplayFor(modelItem => item.tarihBitis)
+            </td>
+
+        </tr>
+    }
+</table>
+}

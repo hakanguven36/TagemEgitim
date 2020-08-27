@@ -1,0 +1,48 @@
+﻿@model TagemEgitim.Models.Kurs
+
+<div>
+    <h4>
+        @Html.DisplayFor(model => model.isim) <br />
+        [@Html.DisplayFor(model => model.isimEN)]
+    </h4>
+    <hr />
+    <dl class="row">
+        
+        <dt class = "col-sm-4">
+            Tarih
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.tarihBasla) - 
+            @Html.DisplayFor(model => model.tarihBitis) 
+            [@Html.DisplayFor(model => model.kursSuresi) gün]
+        </dd>
+        
+        <dt class = "col-sm-4">
+            Ulus - Ev - Toplantı
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.ulustürü) - 
+            @Html.DisplayFor(model => model.evtürü) - 
+            @Html.DisplayFor(model => model.toplantıtürü)
+        </dd>
+        <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.notlar)
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.notlar)
+        </dd>
+        <dt class = "col-sm-4">
+            Katılımcı Sayısı
+        </dt>
+        <dd class = "col-sm-8">
+            @{ 
+                var kisisayısı = Model.kişikurs.Count;
+                var grupsayısı = Model.obscures.Sum(u => u.sayı);
+                var toplam = kisisayısı + grupsayısı;
+            }
+            Kişi Sayısı: @kisisayısı<br />
+            Grup Sayısı: @grupsayısı<br />
+            Toplam Sayı: @toplam
+        </dd>
+    </dl>
+</div>

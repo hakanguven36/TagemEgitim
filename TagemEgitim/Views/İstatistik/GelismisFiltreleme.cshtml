@@ -1,0 +1,62 @@
+﻿
+<div style="display: flex;flex-flow: wrap;">
+    <div>
+        <table class="table table-hover m-5" style="max-width:20em">
+            <tr>
+                <td>Ulusal</td>
+                <td><input class="form-check-inline" type="checkbox" id="ulus_u" checked /></td>
+            </tr>
+            <tr>
+                <td>Uluslararası</td>
+                <td><input class="form-check-inline" type="checkbox" id="ulus_a" checked /></td>
+            </tr>
+            <tr><td colspan="2">&nbsp;</td></tr>
+            <tr>
+                <td>Ev Sahipliği</td>
+                <td><input class="form-check-inline" type="checkbox" id="ev_s" checked /></td>
+            </tr>
+            <tr>
+                <td>Organizasyon</td>
+                <td><input class="form-check-inline" type="checkbox" id="ev_o" checked /></td>
+            </tr>
+            <tr><td colspan="2">&nbsp;</td></tr>
+            <tr>
+                <td>Çalıştay</td>
+                <td><input class="form-check-inline" type="checkbox" id="topl_c" checked /></td>
+            </tr>
+            <tr>
+                <td>Eğitim</td>
+                <td><input class="form-check-inline" type="checkbox" id="topl_e" checked /></td>
+            </tr>
+            <tr>
+                <td>Toplantı</td>
+                <td><input class="form-check-inline" type="checkbox" id="topl_t" checked /></td>
+            </tr>
+        </table>
+        <br />
+        <button class="btn btn-warning form-control" onclick="GelismisGetir()"> Gelişmiş Getir </button>
+    </div>
+    <div id="gelismisSonuclar"></div>
+</div>
+
+<script>
+    function GelismisGetir() {
+        var sendObj = {
+            tarihStart:$("#tarihStart").val() ,
+            tarihEnd:$("#tarihEnd").val(),
+            ulus_u: $("#ulus_u").is(":checked"),
+            ulus_a: $("#ulus_a").is(":checked"),
+            ev_s: $("#ev_s").is(":checked"),
+            ev_o: $("#ev_o").is(":checked"),
+            topl_c: $("#topl_c").is(":checked"),
+            topl_e: $("#topl_e").is(":checked"),
+            topl_t: $("#topl_t").is(":checked")
+        };
+
+        new OzAjax("/İstatistik/GelişmişGetir", POST, sendObj, gelismisGetirBasari).BasitGonder();
+        function gelismisGetirBasari(data) {
+            $("#gelismisSonuclar").html(data);
+        }
+    }
+    
+</script>

@@ -1,0 +1,147 @@
+﻿@model IEnumerable<TagemEgitim.Models.Kurs>
+
+@{
+    int A = 0;
+    int B = 0;
+    int C = 0;
+    int D = 0;
+}
+<div style="margin:5em">
+
+
+<h4>Ulus Türü</h4>
+<table class="table table-bordered bg-light" style="max-width:70em">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Kurs Sayısı</th>
+            <th>Kişi Sayısı</th>
+            <th>Obscure Sayısı</th>
+            <th>Toplam</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            @{
+                A = Model.Where(u => u.ulustürü == ULUSTÜRÜ.Ulusal).Count();
+                B = Model.Where(u => u.ulustürü == ULUSTÜRÜ.Ulusal).SelectMany(u => u.kişikurs).Count();
+                C = Model.Where(u => u.ulustürü == ULUSTÜRÜ.Ulusal).SelectMany(u => u.obscures).Sum(u => u.sayı);
+                D = B + C;
+            }
+            <td>Ulusal</td>
+            <td>@A</td>
+            <td>@B</td>
+            <td>@C</td>
+            <td>@D</td>
+        </tr>
+        <tr>
+            @{
+                A = Model.Where(u => u.ulustürü == ULUSTÜRÜ.Uluslararası).Count();
+                B = Model.Where(u => u.ulustürü == ULUSTÜRÜ.Uluslararası).SelectMany(u => u.kişikurs).Count();
+                C = Model.Where(u => u.ulustürü == ULUSTÜRÜ.Uluslararası).SelectMany(u => u.obscures).Sum(u => u.sayı);
+                D = B + C;
+            }
+            <td>Uluslararası</td>
+            <td>@A</td>
+            <td>@B</td>
+            <td>@C</td>
+            <td>@D</td>
+        </tr>
+    </tbody>
+</table>
+
+<h4>Ev Türü</h4>
+<table class="table table-bordered bg-light" style="max-width:70em">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Kurs Sayısı</th>
+            <th>Kişi Sayısı</th>
+            <th>Obscure Sayısı</th>
+            <th>Toplam</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            @{
+                A = Model.Where(u => u.evtürü == EVTÜRÜ.EvSahipliği).Count();
+                B = Model.Where(u => u.evtürü == EVTÜRÜ.EvSahipliği).SelectMany(u => u.kişikurs).Count();
+                C = Model.Where(u => u.evtürü == EVTÜRÜ.EvSahipliği).SelectMany(u => u.obscures).Sum(u => u.sayı);
+                D = B + C;
+            }
+            <td>EvSahipliği</td>
+            <td>@A</td>
+            <td>@B</td>
+            <td>@C</td>
+            <td>@D</td>
+        </tr>
+        <tr>
+            @{
+                A = Model.Where(u => u.evtürü == EVTÜRÜ.Organizasyon).Count();
+                B = Model.Where(u => u.evtürü == EVTÜRÜ.Organizasyon).SelectMany(u => u.kişikurs).Count();
+                C = Model.Where(u => u.evtürü == EVTÜRÜ.Organizasyon).SelectMany(u => u.obscures).Sum(u => u.sayı);
+                D = B + C;
+            }
+            <td>Organizasyon</td>
+            <td>@A</td>
+            <td>@B</td>
+            <td>@C</td>
+            <td>@D</td>
+        </tr>
+    </tbody>
+</table>
+
+<h4>Toplantı Türü</h4>
+<table class="table table-bordered bg-light" style="max-width:70em">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Kurs Sayısı</th>
+            <th>Kişi Sayısı</th>
+            <th>Obscure Sayısı</th>
+            <th>Toplam</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            @{
+                A = Model.Where(u => u.toplantıtürü == TOPLANTITÜRÜ.Eğitim).Count();
+                B = Model.Where(u => u.toplantıtürü == TOPLANTITÜRÜ.Eğitim).SelectMany(u => u.kişikurs).Count();
+                C = Model.Where(u => u.toplantıtürü == TOPLANTITÜRÜ.Eğitim).SelectMany(u => u.obscures).Sum(u => u.sayı);
+                D = B + C;
+            }
+            <td>Eğitim</td>
+            <td>@A</td>
+            <td>@B</td>
+            <td>@C</td>
+            <td>@D</td>
+        </tr>
+        <tr>
+            @{
+                A = Model.Where(u => u.toplantıtürü == TOPLANTITÜRÜ.Toplantı).Count();
+                B = Model.Where(u => u.toplantıtürü == TOPLANTITÜRÜ.Toplantı).SelectMany(u => u.kişikurs).Count();
+                C = Model.Where(u => u.toplantıtürü == TOPLANTITÜRÜ.Toplantı).SelectMany(u => u.obscures).Sum(u => u.sayı);
+                D = B + C;
+            }
+            <td>Toplantı</td>
+            <td>@A</td>
+            <td>@B</td>
+            <td>@C</td>
+            <td>@D</td>
+        </tr>
+        <tr>
+            @{
+                A = Model.Where(u => u.toplantıtürü == TOPLANTITÜRÜ.Çalıştay).Count();
+                B = Model.Where(u => u.toplantıtürü == TOPLANTITÜRÜ.Çalıştay).SelectMany(u => u.kişikurs).Count();
+                C = Model.Where(u => u.toplantıtürü == TOPLANTITÜRÜ.Çalıştay).SelectMany(u => u.obscures).Sum(u => u.sayı);
+                D = B + C;
+            }
+            <td>Çalıştay</td>
+            <td>@A</td>
+            <td>@B</td>
+            <td>@C</td>
+            <td>@D</td>
+        </tr>
+    </tbody>
+</table>
+</div>

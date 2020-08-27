@@ -1,0 +1,208 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    var buyıl = DateTime.Now.Year;
+}
+
+<input type="hidden" id="buKursaDon" value="@ViewBag.buKursaDön" />
+
+<button class="btn btn-outline-success" onclick="KursYaratFormuAc()"><span class="fas fa-plus"></span> Kurs Yarat</button>
+<button class="btn btn-outline-info" onclick="KursDetay()"><span class="fas fa-search"></span> Detay</button>
+<button class="btn btn-outline-warning" onclick="KursDuzenleFormuAc()"><span class="fas fa-hammer"></span> Kursu Düzenle</button>
+<button class="btn btn-outline-danger" onclick="KursSilFormuAc()"><span class="fas fa-eraser"></span> Kursu Sil</button>
+<br />
+<br />
+<div class="row">
+    <div class="col-2 col-xl-1  form-group" id="filtreDiv">
+        <h4>Filtreler</h4>
+        <input class="form-control" placeholder="Ara..." id="arananKurs" />
+        <label class="col-form-label" for="yil">Yıl: </label>
+        <select class="form-control" id="yil">
+            <option value="">Hepsi</option>
+            @for (int i = 0; i < 30; i++)
+            {
+                <option value="@(buyıl - i)">@(buyıl - i)</option>
+            }
+        </select>
+        <label class="col-form-label" for="ulusturu">Ulus Türü:</label>
+        <select class="form-control" id="ulusturu" asp-items="Html.GetEnumSelectList<ULUSTÜRÜ>()">
+            <option value="">Hepsi</option>
+        </select>
+
+        <label class="col-form-label" for="evturu">Ev Türü:</label>
+        <select class="form-control" id="evturu" asp-items="Html.GetEnumSelectList<EVTÜRÜ>()">
+            <option value="">Hepsi</option>
+        </select>
+
+        <label class="col-form-label" for="toplantituru">Toplantı Türü:</label>
+        <select class="form-control" id="toplantituru" asp-items="Html.GetEnumSelectList<TOPLANTITÜRÜ>()">
+            <option value="">Hepsi</option>
+        </select>
+        <br />
+        <button class="form-control btn btn-secondary" onclick="FiltreTemizle()">Temizle</button>
+    </div>
+
+    <div class="col" id="kursListDiv"><center><div class="h1 dot-bricks"></div><br /><h5><i> Yükleniyor </i></h5></center></div>
+    <div class="col collapse sticky-top" id="katilimList" style="position:static; background-color:floralwhite"></div>
+</div>
+
+<script>
+    var selectedKurs = 0;
+    var filtreKurs = {
+        yıl: 0,
+        aranan: "",
+        ulustürü: null,
+        evtürü: null,
+        toplantıtürü: null,
+        pageNo: 1,
+        selectedKurs: 0
+    };
+    $(document).ready(function () {
+        var buKursaDon = Number($("#buKursaDon").val());
+        if (buKursaDon > 0) {
+            selectedKurs = buKursaDon;
+            filtreKurs.selectedKurs = buKursaDon;
+        }
+        KursListele();
+    })
+
+    function KursListele() {
+        new OzAjax("/Kurslar/Listele", GET, filtreKurs, kursListeleBasari).BasitGonder();
+        function kursListeleBasari(data) {
+            $("#kursListDiv").html(data);
+            SelectKurs(filtreKurs.selectedKurs);
+        }
+    }
+    $("#filtreDiv input").keyup(function () {
+        if ($(this).val().length > 2 | $(this).val().length == 0) {
+            FiltreGuncelle();
+            KursListele();
+        }
+    });
+    $("#filtreDiv select").change(function () {
+        FiltreGuncelle();
+        KursListele();
+    });
+    function FiltreGuncelle() {
+        filtreKurs.aranan = $("#arananKurs").val();
+        filtreKurs.yıl = $("#yil").val();
+        filtreKurs.ulustürü = $("#ulusturu").val();
+        filtreKurs.evtürü = $("#evturu").val();
+        filtreKurs.toplantıtürü = $("#toplantituru").val();
+        filtreKurs.selectedKurs = 0;
+    }
+    function FiltreTemizle() {
+        $("#arananKurs").val("");
+        $("#yil").val("");
+        $("#ulusturu").val("");
+        $("#evturu").val("");
+        $("#toplantituru").val("");
+        filtreKurs.pageNo = 1;
+        FiltreGuncelle();
+        KursListele();
+    }
+
+    function SayfayaGit(pageNo) {
+        filtreKurs.selectedKurs = 0;
+        filtreKurs.pageNo = pageNo;
+        KursListele();
+    }
+
+    function SelectKurs(id) {
+        selectedKurs = id;
+        BoyaKurs(id);
+        KatilimListesiGoster();
+    }
+    function BoyaKurs(id) {
+        $("tr").css("background-color", "transparent");
+        $("#kursdom_" + id).css("background-color", "lightgray");
+    }
+
+    function KatilimListesiGoster() {
+        if (selectedKurs == 0) {
+            KatilimClose();
+            return;
+        }
+        new OzAjax("/Kurslar/KatılımListesi", GET, { kursID: selectedKurs }, katilimListesiGosterBasari).BasitGonder();
+        function katilimListesiGosterBasari(data) {
+            KatilimOpen();
+            $("#katilimList").html(data);
+        }
+    }
+    function KatilimOpen() {
+        $("#katilimList").show(500);
+    }
+    function KatilimClose() {
+        $("#katilimList").hide(500);
+    }
+
+    function KursYaratFormuAc() {
+        new OzAjax("/Kurslar/KursYarat", GET, null, kursYaratFormBasari).BasitGonder();
+        function kursYaratFormBasari(data) {
+            new OzModal().Sayfa(data);
+        }
+    }
+    function KursYarat(form) {
+        new OzAjax("/Kurslar/KursYarat", POST, $(form).serialize(), kursYaratFormGonderBasari).BasitGonder();
+        function kursYaratFormGonderBasari(data) {
+            new OzModal().Kapat();
+            selectedKurs = JSON.parse(data).kursID;
+            filtreKurs.selectedKurs = selectedKurs;
+            KursListele();
+        }
+    }
+
+    function KursDuzenleFormuAc() {
+        if (selectedKurs == 0) {
+            new OzModal().Bilgi("Kurs seçiniz.", 1200);
+            return;
+        }
+        new OzAjax("/Kurslar/KursDüzenle", GET, { id: selectedKurs }, kursDuzenleFormAcBasari).BasitGonder();
+        function kursDuzenleFormAcBasari(data) {
+            new OzModal().Sayfa(data);
+        }
+    }
+    function KursDuzenle(form) {
+        new OzAjax("/Kurslar/KursDüzenle", POST, $(form).serialize(), kursDuzenleFormGonderBasari).BasitGonder();
+        function kursDuzenleFormGonderBasari(data) {
+            new OzModal().Kapat();
+            filtreKurs.selectedKurs = selectedKurs;
+            KursListele();
+        }
+    }
+
+    function KursSilFormuAc() {
+        if (selectedKurs == 0) {
+            new OzModal().Bilgi("Kurs seçiniz.", 1200);
+            return;
+        }
+        var ozonay = new OzOnay();
+        ozonay.soruTxt = "Bu kurs ve bağlı katılım listeleri silinecek! Onaylıyor musunuz?";
+        ozonay.evetTxt = "Sil!";
+        ozonay.hayirTxt = "İptal";
+        ozonay.soruCls = "h2 text-danger";
+        ozonay.evetCls = "btn btn-lg btn-danger";
+        ozonay.hayirCls = "btn btn-lg btn-secondary";
+        ozonay.Sor(kursSilConfirmed);
+    }
+    function kursSilConfirmed() {
+        new OzAjax("/Kurslar/KursSil", POST, { id: selectedKurs }, kursSilBasari).BasitGonder();
+        function kursSilBasari(data) {
+            new OzModal().Bilgi(data, 1000);
+            KursListele();
+            SelectKurs(0);
+        }
+    }
+
+    function KursDetay() {
+        if (selectedKurs == 0) {
+            new OzModal().Bilgi("Kurs seçiniz.", 1200);
+            return;
+        }
+        new OzAjax("/Kurslar/KursDetay", GET, { id: selectedKurs }, kursDetayBasari).BasitGonder();
+        function kursDetayBasari(data) {
+            new OzModal().Sayfa(data);
+        }
+    }
+</script>
+

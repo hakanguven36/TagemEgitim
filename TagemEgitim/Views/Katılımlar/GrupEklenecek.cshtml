@@ -1,0 +1,37 @@
+﻿@model TagemEgitim.Models.Obscure
+
+<h4>Obscure</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form id="GrupEklenecekForm">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="isim" class="control-label"></label>
+                <input asp-for="isim" class="form-control" />
+                <span asp-validation-for="isim" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="sayı" class="control-label"></label>
+                <input asp-for="sayı" class="form-control" />
+                <span asp-validation-for="sayı" class="text-danger"></span>
+            </div>
+            <input type="hidden" name="obsKursID" id="obsKursID" />
+            <div class="form-group">
+                <input type="submit" value="Yarat" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+
+    $("#GrupEklenecekForm").submit(function (e) {
+        e.preventDefault();
+        $("#obsKursID").val(TheKursID);
+        GrupEkleFormGonder($("#GrupEklenecekForm").serialize());
+        GrupEklenecek();
+    });
+
+</script>
+

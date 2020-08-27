@@ -1,0 +1,48 @@
+﻿@model IEnumerable<TagemEgitim.Models.Kişi>
+@if (Model.Count() == 0)
+{
+<h2>Kişi Bulunamadı</h2>
+}
+else
+{
+    <h3>Mevcut Kişiler</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.tamisim)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ülke)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ünvan.isim)
+                    @Html.DisplayFor(modelItem => item.tamisim)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ülke.isim)
+                </td>
+                <td>
+                    <div class="btn-group-sm">
+                        <button class="btn btn-sm btn-outline-secondary" onclick="KisiDetay(@item.ID)"><span class="fas fa-search"></span></button>
+                        <button class="btn btn-sm btn-success" onclick="MevcutListedenEkle(@item.ID)"><span class="fas fa-file-import"></span></button>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+}
