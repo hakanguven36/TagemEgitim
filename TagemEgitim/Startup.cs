@@ -15,9 +15,9 @@ namespace TagemEgitim
 {
 	public class Startup
 	{
-		public Startup(IConfiguration configuration)
+		public Startup(IConfiguration _configuration)
 		{
-			Configuration = configuration;
+			Configuration = _configuration;
 		}
 
 		public IConfiguration Configuration { get; }
